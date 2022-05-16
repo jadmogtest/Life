@@ -32,13 +32,18 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  token: {
+    type: String,
+    required: true
+  },
   //Que faire en front quand c'est la création du compte de la personne elle-même?
   relationship: String,
-  //Pourquoi les deux informations suivantes?
   illnesses: [illnessSchema],
   familyHistory: [illnessSchema],
   vaccines: [vaccineSchema],
   medicalTests: [medicalTestSchema],
+  family: [{ type: mongoose.Schema.Types.ObjectId, ref: 'users' }],
+  createdAt: { type: Date, default: Date.now() }
 })
 
 const userModel = mongoose.model('users', userSchema)

@@ -10,7 +10,8 @@ const vaccineSchema = mongoose.Schema({
   sex: String,
   profession: String,
   priority: String,
-  status: String
+  status: String,
+  createdAt: { type: Date, default: Date.now() }
 })
 
 const vaccineModel = mongoose.model('vaccines', vaccineSchema)
