@@ -8,10 +8,6 @@ var { vaccineModel } = require('../models/vaccines')
 var { medicalTestModel } = require('../models/medicalTests')
 var { illnessModel } = require('../models/illnesses')
 
-/* GET home page. */
-router.get('/', function (req, res, next) {
-  res.render('index', { title: 'Express' });
-});
 
 /* GET home page. */
 router.get('/:userId/profile', async function (req, res, next) {
