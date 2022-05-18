@@ -9,7 +9,13 @@ var options = {
 mongoose.connect('mongodb+srv://jadmog:testpassword@cluster0.8wjqo.mongodb.net/life?retryWrites=true&w=majority',
   options,
   function (err) {
-    console.log(err);
+    if (err) {
+      console.log(
+        `error, failed to connect to the database because --> ${err}`
+      );
+    } else {
+      console.info("*** Database Life connection : Success ***");
+    }
   }
 )
 

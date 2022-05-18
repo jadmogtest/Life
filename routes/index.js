@@ -25,7 +25,27 @@ router.post('/sign-up', async function (req, res, next) {
   var error = []
   var result = false
   var saveUser = null
+  var illnessesObjTab = [];
+  var familyHistoryObjTab = []
+
+  // console.log("je suis un mdp", req.body.illnessesFromFront)
+  var illnessesTab = (req.body.illnessesFromFront).split(',')
+  for (let i = 0; i < illnessesTab.length; i++) {
+    illnessesObjTab[i] = {
+      name: illnessesTab[i]
+    }
+  }
+
+  var familyHistoryTab = (req.body.familyHistoryFromFront).split(",")
+  for (let i = 0; i < familyHistoryTab.length; i++) {
+    familyHistoryObjTab[i] = {
+      name: familyHistoryTab[i]
+    }
+  }
+
+  console.log('tableau illnesses', illnessesTab)
   const hash = bcrypt.hashSync(req.body.passwordFromFront, 10);
+
 
   const data = await userModel.findOne({
     mail: req.body.emailFromFront
@@ -52,6 +72,8 @@ router.post('/sign-up', async function (req, res, next) {
       birthdate: req.body.birthdateFromFront,
       sex: req.body.sexFromFront,
       profession: req.body.professionFromFront,
+      illnesses: illnessesObjTab,
+      familyHistory: familyHistoryObjTab,
       token: uid2(32)
     })
 
