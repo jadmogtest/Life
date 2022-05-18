@@ -32,7 +32,7 @@ router.post('/sign-up', async function (req, res, next) {
   var illnessesObjTab = [];
   var familyHistoryObjTab = []
 
-  console.log("je suis une date", req.body.birthdateFromFront)
+  // console.log("je suis une date", req.body.birthdateFromFront)
 
 
   var illnessesTab = (req.body.illnessesFromFront).split(',')
@@ -169,11 +169,18 @@ router.post('/sign-in', async function (req, res, next) {
 
 
 })
-// router.get("/exams/:userId", async function(req,res){
-//   await userModel.findOne({
-//     _id: req.params
-//   })
+router.get("/exams/:userId", async function (req, res) {
 
-// })
+  var result = false
+
+  const user = await userModel.findOne({
+    _id: req.params.userId
+  });
+  if (user) {
+    result = true
+  }
+  // console.log(user)
+  res.json({ result, vaccines: user.vaccines, medicalTests: user.medicalTests })
+})
 
 module.exports = router;
