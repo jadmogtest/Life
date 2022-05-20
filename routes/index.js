@@ -84,22 +84,22 @@ router.post('/sign-up', async function (req, res, next) {
     })
 
     saveUser = await newUser.save()
-    // console.log('test');
+    console.log('test');
 
     var vaccines = await vaccineModel.find({});
     var medicalTests = await medicalTestModel.find({});
-    // console.log('test2');
-    // console.log(vaccines);
-    // console.log('medicalTests', medicalTests);
+    console.log('test2');
+    console.log(vaccines);
+    console.log('medicalTests', medicalTests);
     var newUserAge = Date.now() - newUser.birthdate;
-    // console.log('newDate', new Date);
-    // console.log('birthDate', newUser.birthdate);
+    console.log('newDate', new Date);
+    console.log('birthDate', newUser.birthdate);
 
-    // console.log('newUserAge', newUserAge);
+    console.log('newUserAge', newUserAge);
     var vaccinEssai = await vaccineModel.findOne({ _id: '627cd2107897b1483fba5fb2' });
-    // console.log('vaccin', vaccinEssai);
-    // console.log('vaccin start age', vaccinEssai.startAge);
-    // console.log('vaccin end age', vaccinEssai.endAge);
+    console.log('vaccin', vaccinEssai);
+    console.log('vaccin start age', vaccinEssai.startAge);
+    console.log('vaccin end age', vaccinEssai.endAge);
     // Quoi? Choix des vaccins concernant la personne selon leur age, sexe, profession
     // Comment? Par filtrage du tableau des vaccins en Base de données(BDD) selon les critères de sélection
     var customizedVaccines = vaccines.filter(function (vaccine) {
@@ -120,8 +120,8 @@ router.post('/sign-up', async function (req, res, next) {
         (newUser.profession === medicalTest.profession || medicalTest.profession === ''));
     })
 
-    // console.log('customized vaccines', customizedVaccines)
-    // console.log('customized medical tests', customizedMedicalTests)
+    console.log('customized vaccines', customizedVaccines)
+    console.log('customized medical tests', customizedMedicalTests)
 
     if (saveUser) {
       await userModel.updateOne({ _id: newUser._id.toString() }, { vaccines: customizedVaccines, medicalTests: customizedMedicalTests });
@@ -179,7 +179,7 @@ router.get("/exams/:userId", async function (req, res) {
   if (user) {
     result = true
   }
-  // console.log(user)
+  console.log(user)
   res.json({ result, vaccines: user.vaccines, medicalTests: user.medicalTests })
 })
 
