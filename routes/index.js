@@ -144,6 +144,8 @@ router.post('/sign-in', async function (req, res, next) {
   var user = null
   var error = []
 
+  console.log(req.body.emailFromFront)
+  console.log(req.body.passwordFromFront)
   if (req.body.emailFromFront == ''
     || req.body.passwordFromFront == ''
   ) {
@@ -151,10 +153,15 @@ router.post('/sign-in', async function (req, res, next) {
   }
 
   if (error.length == 0) {
-    const user = await userModel.findOne({
+    console.log("testtttttt")
+    user = await userModel.findOne({
       mail: req.body.emailFromFront
     })
-
+    if (!user) {
+      var token = ""
+    } else {
+      token = user.token
+    }
 
     if (user && bcrypt.compareSync(req.body.passwordFromFront, user.password)) {
       result = true
@@ -163,9 +170,9 @@ router.post('/sign-in', async function (req, res, next) {
     }
   }
 
-  console.log("ah!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", user)
+  console.log("bouh!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", user)
 
-  res.json({ result, user, error })
+  res.json({ result, user, error, token })
 
 
 })
@@ -179,7 +186,7 @@ router.get("/user/:userId", async function (req, res) {
   if (user) {
     result = true
   }
-  console.log("Ahhhhhhhhhhhhhhhhhhhhhhhhh", user.firstname)
+  console.log("Ohhhhhhhhhhhhhhhhhhhhhhhhh", user.firstname)
   res.json({ result, vaccines: user.vaccines, medicalTests: user.medicalTests, firstname: user.firstname })
 })
 
