@@ -163,13 +163,13 @@ router.post('/sign-in', async function (req, res, next) {
     }
   }
 
-
+  console.log("ah!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", user)
 
   res.json({ result, user, error })
 
 
 })
-router.get("/exams/:userId", async function (req, res) {
+router.get("/user/:userId", async function (req, res) {
 
   var result = false
 
@@ -179,8 +179,8 @@ router.get("/exams/:userId", async function (req, res) {
   if (user) {
     result = true
   }
-  console.log(user)
-  res.json({ result, vaccines: user.vaccines, medicalTests: user.medicalTests })
+  console.log("Ahhhhhhhhhhhhhhhhhhhhhhhhh", user.firstname)
+  res.json({ result, vaccines: user.vaccines, medicalTests: user.medicalTests, firstname: user.firstname })
 })
 
 module.exports = router;
