@@ -10,14 +10,14 @@ var { illnessModel } = require('../models/illnesses')
 
 
 /* GET home page. */
-router.get('/:userId/profile', async function (req, res, next) {
-  const user = await userModel.findOne({ _id: req.params.userId });
-  // console.log('user', user);
-  var vaccines = user.vaccines;
-  var medicalTests = user.medicalTests;
-  var family = user.family;
-  res.json({ vaccines, medicalTests, family });
-});
+// router.get('/:userId/profile', async function (req, res, next) {
+//   const user = await userModel.findOne({ _id: req.params.userId });
+//   // console.log('user', user);
+//   var vaccines = user.vaccines;
+//   var medicalTests = user.medicalTests;
+//   var family = user.family;
+//   res.json({ vaccines, medicalTests, family });
+// });
 
 
 router.post('/sign-up', async function (req, res, next) {
@@ -80,22 +80,22 @@ router.post('/sign-up', async function (req, res, next) {
     })
 
     saveUser = await newUser.save()
-    console.log('test');
+    // console.log('test');
 
     var vaccines = await vaccineModel.find({});
     var medicalTests = await medicalTestModel.find({});
-    console.log('test2');
-    console.log(vaccines);
-    console.log('medicalTests', medicalTests);
+    // console.log('test2');
+    // console.log(vaccines);
+    // console.log('medicalTests', medicalTests);
     var newUserAge = Date.now() - newUser.birthdate;
-    console.log('newDate', new Date);
-    console.log('birthDate', newUser.birthdate);
+    // console.log('newDate', new Date);
+    // console.log('birthDate', newUser.birthdate);
 
-    console.log('newUserAge', newUserAge);
+    // console.log('newUserAge', newUserAge);
     var vaccinEssai = await vaccineModel.findOne({ _id: '627cd2107897b1483fba5fb2' });
-    console.log('vaccin', vaccinEssai);
-    console.log('vaccin start age', vaccinEssai.startAge);
-    console.log('vaccin end age', vaccinEssai.endAge);
+    // console.log('vaccin', vaccinEssai);
+    // console.log('vaccin start age', vaccinEssai.startAge);
+    // console.log('vaccin end age', vaccinEssai.endAge);
     // Quoi? Choix des vaccins concernant la personne selon leur age, sexe, profession
     // Comment? Par filtrage du tableau des vaccins en Base de données(BDD) selon les critères de sélection
     var customizedVaccines = vaccines.filter(function (vaccine) {
@@ -116,8 +116,8 @@ router.post('/sign-up', async function (req, res, next) {
         (newUser.profession === medicalTest.profession || medicalTest.profession === ''));
     })
 
-    console.log('customized vaccines', customizedVaccines)
-    console.log('customized medical tests', customizedMedicalTests)
+    // console.log('customized vaccines', customizedVaccines)
+    // console.log('customized medical tests', customizedMedicalTests)
 
     if (saveUser) {
       await userModel.updateOne({ _id: newUser._id.toString() }, { vaccines: customizedVaccines, medicalTests: customizedMedicalTests });
@@ -140,8 +140,8 @@ router.post('/sign-in', async function (req, res, next) {
   var user = null
   var error = []
 
-  console.log(req.body.emailFromFront)
-  console.log(req.body.passwordFromFront)
+  // console.log(req.body.emailFromFront)
+  // console.log(req.body.passwordFromFront)
   if (req.body.emailFromFront == ''
     || req.body.passwordFromFront == ''
   ) {
@@ -149,7 +149,7 @@ router.post('/sign-in', async function (req, res, next) {
   }
 
   if (error.length == 0) {
-    console.log("testtttttt")
+    // console.log("testtttttt")
     user = await userModel.findOne({
       mail: req.body.emailFromFront
     })
@@ -166,23 +166,26 @@ router.post('/sign-in', async function (req, res, next) {
     }
   }
 
-  console.log("bouh!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", user)
+  // console.log("bouh!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", user)
 
   res.json({ result, user, error, token })
 
 
 })
-router.get("/user/:userId", async function (req, res) {
+
+
+
+router.get("/user/:token", async function (req, res) {
 
   var result = false
-
+  console.log(req.params.token)
   const user = await userModel.findOne({
-    _id: req.params.userId
+    token: req.params.token
   });
   if (user) {
     result = true
   }
-  console.log("Ohhhhhhhhhhhhhhhhhhhhhhhhh", user.firstname)
+  // console.log("Ohhhhhhhhhhhhhhhhhhhhhhhhh", user.firstname)
   res.json({ result, vaccines: user.vaccines, medicalTests: user.medicalTests, firstname: user.firstname })
 })
 
