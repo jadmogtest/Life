@@ -14,14 +14,14 @@ router.get('/', function (req, res, next) {
 });
 
 /* GET home page. */
-router.get('/:userId/profile', async function (req, res, next) {
-  const user = await userModel.findOne({ _id: req.params.userId });
-  // console.log('user', user);
-  var vaccines = user.vaccines;
-  var medicalTests = user.medicalTests;
-  var family = user.family;
-  res.json({ vaccines, medicalTests, family });
-});
+// router.get('/:userId/profile', async function (req, res, next) {
+//   const user = await userModel.findOne({ _id: req.params.userId });
+//   // console.log('user', user);
+//   var vaccines = user.vaccines;
+//   var medicalTests = user.medicalTests;
+//   var family = user.family;
+//   res.json({ vaccines, medicalTests, family });
+// });
 
 
 router.post('/sign-up', async function (req, res, next) {
