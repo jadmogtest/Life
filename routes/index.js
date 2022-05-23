@@ -12,7 +12,7 @@ var { illnessModel } = require('../models/illnesses')
 /* GET home page. */
 router.get('/:userId/profile', async function (req, res, next) {
   const user = await userModel.findOne({ _id: req.params.userId });
-  console.log('user', user);
+  // console.log('user', user);
   var vaccines = user.vaccines;
   var medicalTests = user.medicalTests;
   var family = user.family;
@@ -28,7 +28,9 @@ router.post('/sign-up', async function (req, res, next) {
   var illnessesObjTab = [];
   var familyHistoryObjTab = []
 
-  // console.log("je suis un mdp", req.body.illnessesFromFront)
+  // console.log("je suis une date", req.body.birthdateFromFront)
+
+
   var illnessesTab = (req.body.illnessesFromFront).split(',')
   for (let i = 0; i < illnessesTab.length; i++) {
     illnessesObjTab[i] = {
@@ -43,7 +45,7 @@ router.post('/sign-up', async function (req, res, next) {
     }
   }
 
-  console.log('tableau illnesses', illnessesTab)
+  // console.log('tableau illnesses', illnessesTab)
   const hash = bcrypt.hashSync(req.body.passwordFromFront, 10);
 
 
@@ -119,10 +121,10 @@ router.post('/sign-up', async function (req, res, next) {
 
     if (saveUser) {
       await userModel.updateOne({ _id: newUser._id.toString() }, { vaccines: customizedVaccines, medicalTests: customizedMedicalTests });
-      console.log('newUser id', newUser._id)
+      // console.log('newUser id', newUser._id)
       const newUserTest = await userModel.findOne({ _id: newUser._id.toString() })
-      console.log('vaccinesAdded', newUserTest.vaccines)
-      console.log('testsAdded', newUserTest.medicalTests)
+      // console.log('vaccinesAdded', newUserTest.vaccines)
+      // console.log('testsAdded', newUserTest.medicalTests)
       result = true
     }
   }
@@ -138,6 +140,8 @@ router.post('/sign-in', async function (req, res, next) {
   var user = null
   var error = []
 
+  console.log(req.body.emailFromFront)
+  console.log(req.body.passwordFromFront)
   if (req.body.emailFromFront == ''
     || req.body.passwordFromFront == ''
   ) {
@@ -145,10 +149,15 @@ router.post('/sign-in', async function (req, res, next) {
   }
 
   if (error.length == 0) {
-    const user = await userModel.findOne({
+    console.log("testtttttt")
+    user = await userModel.findOne({
       mail: req.body.emailFromFront
     })
-
+    if (!user) {
+      var token = ""
+    } else {
+      token = user.token
+    }
 
     if (user && bcrypt.compareSync(req.body.passwordFromFront, user.password)) {
       result = true
@@ -157,10 +166,24 @@ router.post('/sign-in', async function (req, res, next) {
     }
   }
 
+  console.log("bouh!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", user)
 
-  res.json({ result, user, error })
+  res.json({ result, user, error, token })
 
 
+})
+router.get("/user/:userId", async function (req, res) {
+
+  var result = false
+
+  const user = await userModel.findOne({
+    _id: req.params.userId
+  });
+  if (user) {
+    result = true
+  }
+  console.log("Ohhhhhhhhhhhhhhhhhhhhhhhhh", user.firstname)
+  res.json({ result, vaccines: user.vaccines, medicalTests: user.medicalTests, firstname: user.firstname })
 })
 
 module.exports = router;
