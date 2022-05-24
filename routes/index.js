@@ -189,4 +189,28 @@ router.get("/user/:token", async function (req, res) {
   res.json({ result, vaccines: user.vaccines, medicalTests: user.medicalTests, firstname: user.firstname })
 })
 
+
+router.post("/add-profile", async function (req, res) {
+
+  let user = await userModel.findOne({
+    mail: req.body.emailFromFront
+  })
+
+  if (user) {
+
+  } else {
+    var newUser = new userModel({
+      mail: req.body.emailFromFront,
+      firstname: req.body.firstnameFromFront,
+      lastname: req.body.lastnameFromFront,
+      birthdate: req.body.birthdateFromFront,
+      sex: req.body.sexFromFront,
+      profession: req.body.professionFromFront,
+      illnesses: illnessesObjTab,
+      familyHistory: familyHistoryObjTab,
+      token: uid2(32)
+    })
+  }
+});
+
 module.exports = router;
