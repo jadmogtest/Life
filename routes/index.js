@@ -216,22 +216,24 @@ router.post("/add-profile/:token", async function (req, res) {
   var illnessesObjTab = [];
   var familyHistoryObjTab = []
 
-  // console.log("je suis une date", req.body.birthdateFromFront)
-
-
-  var illnessesTab = (req.body.illnessesFromFront).split(',')
-  for (let i = 0; i < illnessesTab.length; i++) {
-    illnessesObjTab[i] = {
-      name: illnessesTab[i]
+  if (req.body.illnessesFromFront) {
+    var illnessesTab = (req.body.illnessesFromFront).split(',')
+    for (let i = 0; i < illnessesTab.length; i++) {
+      illnessesObjTab[i] = {
+        name: illnessesTab[i]
+      }
     }
   }
 
-  var familyHistoryTab = (req.body.familyHistoryFromFront).split(",")
-  for (let i = 0; i < familyHistoryTab.length; i++) {
-    familyHistoryObjTab[i] = {
-      name: familyHistoryTab[i]
+  if (req.body.familyHistoryFromFront) {
+    var familyHistoryTab = (req.body.familyHistoryFromFront).split(",")
+    for (let i = 0; i < familyHistoryTab.length; i++) {
+      familyHistoryObjTab[i] = {
+        name: familyHistoryTab[i]
+      }
     }
   }
+
 
   const mainUser = await userModel.findOne({ token: req.params.token });
 
@@ -239,10 +241,11 @@ router.post("/add-profile/:token", async function (req, res) {
   let user = await userModel.findOne({
     mail: req.body.emailFromFront
   })
+  console.log(req.body.firstnameFromFront)
 
   if (!user) {
     user = new userModel({
-      mail: req.body.emailFromFront,
+
       firstname: req.body.firstnameFromFront,
       lastname: req.body.lastnameFromFront,
       birthdate: req.body.birthdateFromFront,
@@ -289,12 +292,9 @@ router.post("/add-profile/:token", async function (req, res) {
   }
   const mainUserUpdated = await userModel.updateOne({ token: req.params.token }, { family: newFamily });
 
-  res.json({ mainUser, })
+  res.json({ mainUser, user })
 
 });
 
-router.post("/add-profile", async function (req, res) {
 
-  res.json({ result })
-})
 module.exports = router;

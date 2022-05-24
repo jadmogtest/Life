@@ -4,10 +4,8 @@ var { medicalTestSchema } = require('./medicalTests')
 var { illnessSchema } = require('./illnesses')
 
 const userSchema = mongoose.Schema({
-  mail: {
-    type: String,
-    required: true
-  },
+  mail: String,
+
   password: String,
   firstname: {
     type: String,
