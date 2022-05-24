@@ -242,7 +242,6 @@ router.post("/add-profile/:token", async function (req, res) {
 
   if (!user) {
     user = new userModel({
-      mail: req.body.emailFromFront,
       firstname: req.body.firstnameFromFront,
       lastname: req.body.lastnameFromFront,
       birthdate: req.body.birthdateFromFront,
