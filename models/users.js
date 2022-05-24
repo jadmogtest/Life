@@ -8,10 +8,7 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  password: {
-    type: String,
-    required: true
-  },
+  password: String,
   firstname: {
     type: String,
     required: true
@@ -32,10 +29,7 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  token: {
-    type: String,
-    required: true
-  },
+  token: String,
   //Que faire en front quand c'est la création du compte de la personne elle-même?
   relationship: String,
   illnesses: [illnessSchema],
