@@ -15,7 +15,7 @@ router.get("/", function (req, res, next) {
 });
 
 /* GET home page. */
-router.get('/:userId/profile', async function (req, res, next) {
+router.get("/:userId/profile", async function (req, res, next) {
   const user = await userModel.findOne({ _id: req.params.userId });
   // console.log('user', user);
   var vaccines = user.vaccines;
@@ -80,12 +80,10 @@ router.post("/sign-up", async function (req, res, next) {
       token: uid2(32),
     });
 
-    saveUser = await newUser.save()
-    // console.log('test');
+    saveUser = await newUser.save();
 
     var vaccines = await vaccineModel.find({});
     var medicalTests = await medicalTestModel.find({});
-    // console.log('test2');
     // console.log(vaccines);
     // console.log('medicalTests', medicalTests);
     var newUserAge = Date.now() - newUser.birthdate;
@@ -93,7 +91,9 @@ router.post("/sign-up", async function (req, res, next) {
     // console.log('birthDate', newUser.birthdate);
 
     // console.log('newUserAge', newUserAge);
-    var vaccinEssai = await vaccineModel.findOne({ _id: '627cd2107897b1483fba5fb2' });
+    var vaccinEssai = await vaccineModel.findOne({
+      _id: "627cd2107897b1483fba5fb2",
+    });
     // console.log('vaccin', vaccinEssai);
     // console.log('vaccin start age', vaccinEssai.startAge);
     // console.log('vaccin end age', vaccinEssai.endAge);
@@ -147,19 +147,15 @@ router.post("/sign-up", async function (req, res, next) {
   res.json({ result, saveUser, error, customizedVaccines });
 });
 
-
-router.post('/sign-in', async function (req, res, next) {
-
-  var result = false
-  var user = null
-  var error = []
+router.post("/sign-in", async function (req, res, next) {
+  var result = false;
+  var user = null;
+  var error = [];
 
   // console.log(req.body.emailFromFront)
   // console.log(req.body.passwordFromFront)
-  if (req.body.emailFromFront == ''
-    || req.body.passwordFromFront == ''
-  ) {
-    error.push('champs vides')
+  if (req.body.emailFromFront == "" || req.body.passwordFromFront == "") {
+    error.push("champs vides");
   }
 
   if (error.length == 0) {
@@ -182,19 +178,14 @@ router.post('/sign-in', async function (req, res, next) {
 
   // console.log("bouh!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", user)
 
-  res.json({ result, user, error, token })
-
-
-})
-
-
+  res.json({ result, user, error, token });
+});
 
 router.get("/user/:token", async function (req, res) {
-
-  var result = false
-  console.log(req.params.token)
+  var result = false;
+  console.log(req.params.token);
   const user = await userModel.findOne({
-    token: req.params.token
+    token: req.params.token,
   });
   if (user) {
     result = true;
@@ -209,19 +200,18 @@ router.get("/user/:token", async function (req, res) {
 });
 
 //Route qui permet d'enregistrer en base de données les établissements de santé en BDD
-router.get("/addhcpro", async function (req, res, next) {
+router.post("/addhcpro", async function (req, res, next) {
   var newHCPro = new HCProModel({
-    profession: String,
-    adresse: String,
-    ville: String,
-    tel: String,
-    category: String,
-    secteur: String,
-    profession: req.body.emailFromFront,
+    profession: req.body.professionFromFront,
+    adresse: req.body.adresseFromFront,
+    ville: req.body.villeFromFront,
+    tel: req.body.telFromFront,
+    category: req.body.categoryFromFront,
+    secteur: req.body.secteurFromFront,
   });
-
   saveHCPro = await newHCPro.save();
-  console.log("test");
+  console.log("Nouveau professionnel de santé bien ajouté !", saveHCPro);
+  res.json({ saveHCPro });
 });
 
 module.exports = router;
