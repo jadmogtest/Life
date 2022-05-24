@@ -144,8 +144,6 @@ router.post('/sign-in', async function (req, res, next) {
   var user = null
   var error = []
 
-  // console.log(req.body.emailFromFront)
-  // console.log(req.body.passwordFromFront)
   if (req.body.emailFromFront == ''
     || req.body.passwordFromFront == ''
   ) {
@@ -153,7 +151,7 @@ router.post('/sign-in', async function (req, res, next) {
   }
 
   if (error.length == 0) {
-    // console.log("testtttttt")
+
     user = await userModel.findOne({
       mail: req.body.emailFromFront
     })
@@ -169,8 +167,6 @@ router.post('/sign-in', async function (req, res, next) {
       error.push('email ou mot de passe incorrect')
     }
   }
-
-  // console.log("bouh!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", user)
 
   res.json({ result, user, error, token })
 
@@ -189,8 +185,11 @@ router.get("/user/:token", async function (req, res) {
   if (user) {
     result = true
   }
-  // console.log("Ohhhhhhhhhhhhhhhhhhhhhhhhh", user.firstname)
   res.json({ result, vaccines: user.vaccines, medicalTests: user.medicalTests, firstname: user.firstname })
 })
 
+router.post("/add-profile", async function (req, res) {
+
+  res.json({ result })
+})
 module.exports = router;
