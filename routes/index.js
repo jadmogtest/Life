@@ -190,27 +190,86 @@ router.get("/user/:token", async function (req, res) {
 })
 
 
-router.post("/add-profile", async function (req, res) {
+router.post("/add-profile/:token", async function (req, res) {
 
+  var illnessesObjTab = [];
+  var familyHistoryObjTab = []
+
+  // console.log("je suis une date", req.body.birthdateFromFront)
+
+
+  var illnessesTab = (req.body.illnessesFromFront).split(',')
+  for (let i = 0; i < illnessesTab.length; i++) {
+    illnessesObjTab[i] = {
+      name: illnessesTab[i]
+    }
+  }
+
+  var familyHistoryTab = (req.body.familyHistoryFromFront).split(",")
+  for (let i = 0; i < familyHistoryTab.length; i++) {
+    familyHistoryObjTab[i] = {
+      name: familyHistoryTab[i]
+    }
+  }
+
+  const mainUser = await userModel.findOne({ token: req.params.token });
+
+  let saveUser = null;
   let user = await userModel.findOne({
     mail: req.body.emailFromFront
   })
 
-  if (user) {
-
-  } else {
-    var newUser = new userModel({
+  if (!user) {
+    user = new userModel({
       mail: req.body.emailFromFront,
       firstname: req.body.firstnameFromFront,
       lastname: req.body.lastnameFromFront,
       birthdate: req.body.birthdateFromFront,
       sex: req.body.sexFromFront,
       profession: req.body.professionFromFront,
+      relationship: req.body.relationshipFromFront,
       illnesses: illnessesObjTab,
-      familyHistory: familyHistoryObjTab,
-      token: uid2(32)
+      familyHistory: familyHistoryObjTab
     })
+    saveUser = await user.save()
   }
+
+  var vaccines = await vaccineModel.find({});
+  var medicalTests = await medicalTestModel.find({});
+  var userAge = Date.now() - user.birthdate;
+  // Quoi? Choix des vaccins concernant la personne selon leur age, sexe, profession
+  // Comment? Par filtrage du tableau des vaccins en Base de données(BDD) selon les critères de sélection
+  var customizedVaccines = vaccines.filter(function (vaccine) {
+    // filtrage par âge
+    return ((userAge >= (vaccine.startAge * 31536000000) && userAge <= (vaccine.endAge * 31536000000)) ||
+      // filtrage par sexe
+      (user.sex === vaccine.sex || vaccine.sex === 'unisex') ||
+      // filtrage par profession
+      (user.profession === vaccine.profession));
+  })
+
+  var customizedMedicalTests = medicalTests.filter(function (medicalTest) {
+    // filtrage par âge
+    return ((userAge >= (medicalTest.startAge * 31536000000) && userAge <= (medicalTest.endAge * 31536000000)) ||
+      // filtrage par sexe
+      (user.sex === medicalTest.sex || medicalTest.sex === 'unisex') ||
+      // filtrage par profession
+      (user.profession === medicalTest.profession || medicalTest.profession === ''));
+  })
+
+  if (saveUser) {
+    console.log('test');
+    await userModel.updateOne({ _id: user._id.toString() }, { vaccines: customizedVaccines, medicalTests: customizedMedicalTests });
+  }
+
+  let newFamily = mainUser.family;
+  if (!mainUser.family.find(element => element === user._id)) {
+    newFamily.push(user._id);
+  }
+  const mainUserUpdated = await userModel.updateOne({ token: req.params.token }, { family: newFamily });
+
+  res.json({ mainUser, })
+
 });
 
 module.exports = router;
