@@ -4,18 +4,9 @@ var { medicalTestSchema } = require('./medicalTests')
 var { illnessSchema } = require('./illnesses')
 
 const userSchema = mongoose.Schema({
-  mail: {
-    type: String,
-    required: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-  firstname: {
-    type: String,
-    required: true
-  },
+  mail: String,
+  password: String,
+  firstname: String,
   lastname: {
     type: String,
     required: true
@@ -32,10 +23,7 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  token: {
-    type: String,
-    required: true
-  },
+  token: String,
   //Que faire en front quand c'est la création du compte de la personne elle-même?
   relationship: String,
   illnesses: [illnessSchema],
