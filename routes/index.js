@@ -148,8 +148,6 @@ router.post("/sign-in", async function (req, res, next) {
   var user = null;
   var error = [];
 
-  // console.log(req.body.emailFromFront)
-  // console.log(req.body.passwordFromFront)
   if (req.body.emailFromFront == "" || req.body.passwordFromFront == "") {
     error.push("champs vides");
   }
@@ -192,6 +190,14 @@ router.get("/user/:token", async function (req, res) {
     vaccines: user.vaccines,
     medicalTests: user.medicalTests,
     firstname: user.firstname,
+    lastname: user.lastname,
+    birthdate: user.birthdate,
+    sex: user.sex,
+    profession: user.profession,
+    illnesses: user.illnesses,
+    familyHistory: user.familyHistory,
+    mail: user.mail,
+
   });
 });
 
