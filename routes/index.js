@@ -131,7 +131,7 @@ router.post("/sign-up", async function (req, res, next) {
         { vaccines: customizedVaccines, medicalTests: customizedMedicalTests }
       );
       // console.log('newUser id', newUser._id)
-      const newUserTest = await userModel.findOne({
+      const currentUser = await userModel.findOne({
         _id: newUser._id.toString(),
       });
       // console.log('vaccinesAdded', newUserTest.vaccines)
@@ -140,7 +140,7 @@ router.post("/sign-up", async function (req, res, next) {
     }
   }
 
-  res.json({ result, saveUser, error, customizedVaccines });
+  res.json({ result, saveUser, error, customizedVaccines, currentUser });
 });
 
 router.post("/sign-in", async function (req, res, next) {
