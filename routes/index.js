@@ -132,7 +132,7 @@ router.post("/sign-up", async function (req, res, next) {
       );
       // console.log('newUser id', newUser._id)
       const currentUser = await userModel.findOne({
-        _id: newUser._id.toString(),
+        token: newUser.token,
       });
       // console.log('vaccinesAdded', newUserTest.vaccines)
       // console.log('testsAdded', newUserTest.medicalTests)
