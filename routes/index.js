@@ -223,6 +223,15 @@ router.get("/readhcpro/:token", async function (req, res, next) {
   res.json({ addB });
 });
 
+router.get("/readFamily/:token", async function (req, res, next) {
+  let userData = await userModel
+    .findOne({ token: req.params.token })
+    .populate("family")
+    .exec();
+  let fams = userData.addressBook;
+  console.log("kouroukoukou", fams);
+  res.json({ fams });
+});
 
 router.post("/add-profile/:token", async function (req, res) {
 
