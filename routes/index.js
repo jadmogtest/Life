@@ -228,7 +228,7 @@ router.get("/readFamily/:token", async function (req, res, next) {
     .findOne({ token: req.params.token })
     .populate("family")
     .exec();
-  let fams = userData.addressBook;
+  let fams = userData.family;
   console.log("kouroukoukou", fams);
   res.json({ fams });
 });
