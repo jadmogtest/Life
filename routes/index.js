@@ -10,18 +10,18 @@ var { illnessModel } = require("../models/illnesses");
 var { HCProModel } = require("../models/healthcareprofessional");
 
 
-/* GET home page. */
-router.get("/:userId/profile", async function (req, res, next) {
-  const user = await userModel.findOne({ _id: req.params.userId });
-  // console.log('user', user);
-  var vaccines = user.vaccines;
-  var medicalTests = user.medicalTests;
-  var family = user.family;
-  res.json({ vaccines, medicalTests, family });
+/* GET profil */
+router.get("/profil/:token", async function (req, res, next) {
+  const user = await userModel.findOne({
+    token: req.params.token,
+  });
+
+
+  res.json({ });
 });
 
 router.post("/sign-up", async function (req, res, next) {
-  var error = [];
+  var error = []; //Sécurité
   var result = false;
   var saveUser = null;
   var illnessesObjTab = [];
