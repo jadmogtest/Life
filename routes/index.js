@@ -26,6 +26,7 @@ router.post("/sign-up", async function (req, res, next) {
   var saveUser = null;
   var illnessesObjTab = [];
   var familyHistoryObjTab = [];
+  var currentUser = null;
 
   // console.log("je suis une date", req.body.birthdateFromFront)
 
@@ -131,16 +132,17 @@ router.post("/sign-up", async function (req, res, next) {
         { vaccines: customizedVaccines, medicalTests: customizedMedicalTests }
       );
       // console.log('newUser id', newUser._id)
-      const newUserTest = await userModel.findOne({
-        _id: newUser._id.toString(),
+      currentUser = await userModel.findOne({
+        token: newUser.token,
       });
+      console.log('currentUser', currentUser)
       // console.log('vaccinesAdded', newUserTest.vaccines)
       // console.log('testsAdded', newUserTest.medicalTests)
       result = true;
     }
   }
 
-  res.json({ result, saveUser, error, customizedVaccines });
+  res.json({ result, saveUser, error, customizedVaccines, currentUser });
 });
 
 router.post("/sign-in", async function (req, res, next) {
