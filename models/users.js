@@ -1,40 +1,40 @@
-const mongoose = require('mongoose')
-var { vaccineSchema } = require('./vaccines')
-var { medicalTestSchema } = require('./medicalTests')
-var { illnessSchema } = require('./illnesses')
+const mongoose = require("mongoose");
+var { vaccineSchema } = require("./vaccines");
+var { medicalTestSchema } = require("./medicalTests");
+var { illnessSchema } = require("./illnesses");
 
 const userSchema = mongoose.Schema({
   mail: {
     type: String,
-    required: true
+    required: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   firstname: {
     type: String,
-    required: true
+    required: true,
   },
   lastname: {
     type: String,
-    required: true
+    required: true,
   },
   birthdate: {
     type: Date,
-    required: true
+    required: true,
   },
   profession: {
     type: String,
-    required: true
+    required: true,
   },
   sex: {
     type: String,
-    required: true
+    required: true,
   },
   token: {
     type: String,
-    required: true
+    required: true,
   },
   //Que faire en front quand c'est la création du compte de la personne elle-même?
   relationship: String,
@@ -42,10 +42,13 @@ const userSchema = mongoose.Schema({
   familyHistory: [illnessSchema],
   vaccines: [vaccineSchema],
   medicalTests: [medicalTestSchema],
-  family: [{ type: mongoose.Schema.Types.ObjectId, ref: 'users' }],
-  createdAt: { type: Date, default: Date.now() }
-})
+  family: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
+  addressBook: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "healthcareprofessionals" },
+  ],
+  createdAt: { type: Date, default: Date.now() },
+});
 
-const userModel = mongoose.model('users', userSchema)
+const userModel = mongoose.model("users", userSchema);
 
-module.exports = userModel
+module.exports = userModel;

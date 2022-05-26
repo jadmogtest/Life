@@ -8,20 +8,11 @@ var { vaccineModel } = require("../models/vaccines");
 var { medicalTestModel } = require("../models/medicalTests");
 var { illnessModel } = require("../models/illnesses");
 var { HCProModel } = require("../models/healthcareprofessional");
+const { updateOne } = require("../models/users");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
-});
-
-/* GET home page. */
-router.get("/:userId/profile", async function (req, res, next) {
-  const user = await userModel.findOne({ _id: req.params.userId });
-  // console.log('user', user);
-  var vaccines = user.vaccines;
-  var medicalTests = user.medicalTests;
-  var family = user.family;
-  res.json({ vaccines, medicalTests, family });
 });
 
 router.post("/sign-up", async function (req, res, next) {
@@ -159,7 +150,6 @@ router.post("/sign-in", async function (req, res, next) {
   }
 
   if (error.length == 0) {
-    // console.log("testtttttt")
     user = await userModel.findOne({
       mail: req.body.emailFromFront,
     });
@@ -175,8 +165,6 @@ router.post("/sign-in", async function (req, res, next) {
       error.push("email ou mot de passe incorrect");
     }
   }
-
-  // console.log("bouh!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", user)
 
   res.json({ result, user, error, token });
 });
@@ -199,8 +187,8 @@ router.get("/user/:token", async function (req, res) {
   });
 });
 
-//Route qui permet d'enregistrer en base de données les établissements de santé en BDD
-router.post("/addhcpro", async function (req, res, next) {
+//Route qui permet d'enregistrer en base de données les établissements de santé
+router.post("/addhcpro/:token", async function (req, res, next) {
   var newHCPro = new HCProModel({
     profession: req.body.professionFromFront,
     adresse: req.body.adresseFromFront,
@@ -211,7 +199,24 @@ router.post("/addhcpro", async function (req, res, next) {
   });
   saveHCPro = await newHCPro.save();
   console.log("Nouveau professionnel de santé bien ajouté !", saveHCPro);
+  let user = await userModel.findOne({ token: req.params.token });
+  let result = await userModel.updateOne(
+    { token: req.params.token },
+    { addressBook: [...user.addressBook, saveHCPro] }
+  );
+  console.log("AJOUT ETAB ::::", result);
   res.json({ saveHCPro });
+});
+
+//Route qui permet de lire en BDD les établissements de santé liés à un compte user
+router.get("/readhcpro/:token", async function (req, res, next) {
+  let userData = await userModel
+    .findOne({ token: req.params.token })
+    .populate("addressBook")
+    .exec();
+  let addB = userData.addressBook;
+  console.log("MANDY :::::::", addB);
+  res.json({ addB });
 });
 
 module.exports = router;
